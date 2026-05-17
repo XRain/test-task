@@ -12,15 +12,16 @@
   },
   "dependencies": {
     "@repo/shared": "workspace:*",
-    "nativewind": "^4.1.23",
     "react": "19.2.3",
     "react-native": "0.85.3",
-    "react-native-css-interop": "0.2.4",
-    "react-native-safe-area-context": "^5.5.2"
+    "react-native-safe-area-context": "^5.5.2",
+    "twrnc": "^4.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/runtime": "^7.25.0",
+    "@react-native/codegen": "0.85.3",
+    "@react-native/gradle-plugin": "0.85.3",
     "@react-native-community/cli": "20.1.0",
     "@react-native-community/cli-platform-android": "20.1.0",
     "@react-native-community/cli-platform-ios": "20.1.0",

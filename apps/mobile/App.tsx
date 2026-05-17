@@ -1,14 +1,46 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StatusBar, Text, View } from "react-native";
-import { createApiClient, DataStateList, type Post } from "@repo/shared";
-import "./global.css";
+import { createApiClient, type HunqzProfile } from "@repo/shared";
+import tw from "./src/lib/tw";
 
 const apiClient = createApiClient({
-  baseUrl: "https://jsonplaceholder.typicode.com"
+  baseUrl: "https://www.hunqz.com/api/opengrid/profiles/msescortplus",
+  timeoutMs: 15000
 });
 
+interface ProfileViewModel {
+  name: string;
+  type: string;
+  onlineStatus: string;
+  location: string;
+  age: number | null;
+  rateHour: number | null;
+  currency: string;
+  pictureCount: number;
+  reviewCount: number;
+  headline: string | null;
+}
+
+function buildProfileViewModel(profile: HunqzProfile): ProfileViewModel {
+  const pictureCount = Array.isArray(profile.pictures) ? profile.pictures.length : 0;
+  const reviewCount = Array.isArray(profile.reviews) ? profile.reviews.length : 0;
+
+  return {
+    name: profile.name,
+    type: profile.type,
+    onlineStatus: profile.online_status,
+    location: profile.location ? `${profile.location.name}, ${profile.location.country}` : "Unknown",
+    age: profile.personal?.age ?? null,
+    rateHour: profile.service?.rate_hour ?? null,
+    currency: profile.service?.currency ?? "",
+    pictureCount,
+    reviewCount,
+    headline: profile.headline ?? null
+  };
+}
+
 export default function App() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [profile, setProfile] = useState<ProfileViewModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,9 +49,9 @@ export default function App() {
 
     async function load() {
       try {
-        const result = await apiClient.fetchPosts(6);
+        const result = await apiClient.fetchProfile();
         if (!cancelled) {
-          setPosts(result);
+          setProfile(buildProfileViewModel(result));
         }
       } catch (err) {
         if (!cancelled) {
@@ -39,39 +71,36 @@ export default function App() {
     };
   }, []);
 
-  const content = useMemo(
-    () => (
-      <DataStateList
-        data={posts}
-        loading={loading}
-        error={error}
-        emptyState={<Text className="text-slate-600">No posts yet.</Text>}
-        renderItem={(post) => (
-          <View key={post.id} className="mb-3 rounded-xl bg-white p-4 shadow">
-            <Text className="mb-2 text-lg font-semibold text-slate-900">{post.title}</Text>
-            <Text className="text-slate-600">{post.body}</Text>
-          </View>
-        )}
-      />
-    ),
-    [error, loading, posts]
-  );
-
   return (
-    <View className="flex-1 bg-slate-50">
+    <View style={tw`flex-1 bg-slate-50`}>
       <StatusBar barStyle="dark-content" />
-      <ScrollView className="flex-1 px-5 pt-16">
-        <Text className="text-xs font-semibold uppercase tracking-[2px] text-blue-700">Bootstrap</Text>
-        <Text className="mb-6 mt-2 text-3xl font-bold text-slate-900">React Native App</Text>
+      <ScrollView style={tw`flex-1 px-5 pt-16`} contentContainerStyle={tw`pb-6`}>
+        <Text style={tw`text-xs font-semibold uppercase tracking-[2px] text-blue-700`}>Hunqz</Text>
+        <Text style={tw`mb-6 mt-2 text-3xl font-bold text-slate-900`}>Profile Viewer</Text>
         {loading ? (
-          <View className="items-center py-10">
+          <View style={tw`items-center py-10`}>
             <ActivityIndicator />
-            <Text className="mt-3 text-slate-600">Loading data...</Text>
+            <Text style={tw`mt-3 text-slate-600`}>Loading data...</Text>
           </View>
         ) : error ? (
-          <Text className="rounded-xl bg-red-50 p-4 text-red-700">{error}</Text>
+          <Text style={tw`rounded-xl bg-red-50 p-4 text-red-700`}>{error}</Text>
+        ) : !profile ? (
+          <Text style={tw`text-slate-600`}>Profile is empty.</Text>
         ) : (
-          content
+          <View style={tw`rounded-xl bg-white p-5 shadow`}>
+            <Text style={tw`text-2xl font-semibold text-slate-900`}>{profile.name}</Text>
+            <Text style={tw`mt-2 text-slate-700`}>
+              {profile.type} • {profile.onlineStatus}
+            </Text>
+            <Text style={tw`mt-2 text-slate-700`}>Location: {profile.location}</Text>
+            <Text style={tw`mt-2 text-slate-700`}>Age: {profile.age ?? "Unknown"}</Text>
+            <Text style={tw`mt-2 text-slate-700`}>
+              Rate: {profile.rateHour ?? 0} {profile.currency}
+            </Text>
+            <Text style={tw`mt-2 text-slate-700`}>Pictures: {profile.pictureCount}</Text>
+            <Text style={tw`mt-2 text-slate-700`}>Reviews: {profile.reviewCount}</Text>
+            {profile.headline ? <Text style={tw`mt-4 text-slate-600`}>{profile.headline}</Text> : null}
+          </View>
         )}
       </ScrollView>
     </View>

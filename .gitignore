@@ -5,3 +5,4 @@ node_modules
 .expo
 dist
 coverage
+apps/mobile/android/app/.cxx/
