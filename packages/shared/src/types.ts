@@ -2,6 +2,7 @@ export interface HunqzImage {
   id: string;
   owner_id: string;
   url_token: string;
+  image_url?: string;
   width: number;
   height: number;
   rating: string;
