@@ -1,6 +1,13 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { ActivityIndicator, ScrollView, StatusBar, Text, View } from "react-native";
-import { createApiClient, type HunqzProfile } from "@repo/shared";
+import { createApiClient, useProfile } from "@repo/shared";
+import { ProfileHeader } from "./src/components/ProfileHeader";
+import { PhotoGallery } from "./src/components/PhotoGallery";
+import { PersonalInfo } from "./src/components/PersonalInfo";
+import { PreferencesAndServices } from "./src/components/PreferencesAndServices";
+import { Reviews } from "./src/components/Reviews";
+import { MobileActions } from "./src/components/MobileActions";
+import { BottomNav } from "./src/components/BottomNav";
 import tw from "./src/lib/tw";
 
 const apiClient = createApiClient({
@@ -8,101 +15,73 @@ const apiClient = createApiClient({
   timeoutMs: 15000
 });
 
-interface ProfileViewModel {
-  name: string;
-  type: string;
-  onlineStatus: string;
-  location: string;
-  age: number | null;
-  rateHour: number | null;
-  currency: string;
-  pictureCount: number;
-  reviewCount: number;
-  headline: string | null;
-}
-
-function buildProfileViewModel(profile: HunqzProfile): ProfileViewModel {
-  const pictureCount = Array.isArray(profile.pictures) ? profile.pictures.length : 0;
-  const reviewCount = Array.isArray(profile.reviews) ? profile.reviews.length : 0;
-
-  return {
-    name: profile.name,
-    type: profile.type,
-    onlineStatus: profile.online_status,
-    location: profile.location ? `${profile.location.name}, ${profile.location.country}` : "Unknown",
-    age: profile.personal?.age ?? null,
-    rateHour: profile.service?.rate_hour ?? null,
-    currency: profile.service?.currency ?? "",
-    pictureCount,
-    reviewCount,
-    headline: profile.headline ?? null
-  };
-}
-
 export default function App() {
-  const [profile, setProfile] = useState<ProfileViewModel | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const result = await apiClient.fetchProfile();
-        if (!cancelled) {
-          setProfile(buildProfileViewModel(result));
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Unknown error");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { profile, loading, error } = useProfile(apiClient);
 
   return (
     <View style={tw`flex-1 bg-background`}>
       <StatusBar barStyle="light-content" />
-      <ScrollView style={tw`flex-1 px-5 pt-16`} contentContainerStyle={tw`pb-6`}>
-        <Text style={tw`text-xs font-semibold uppercase tracking-[2px] text-primary font-headline`}>HUNQZ</Text>
-        <Text style={tw`mb-6 mt-2 text-3xl font-bold text-on-background font-headline`}>Profile Viewer</Text>
+      
+      {/* Top Header */}
+      <View style={tw`flex-row items-center justify-between px-6 pt-16 pb-4 bg-background z-50`}>
+        <Text style={tw`text-2xl font-headline font-black tracking-tighter text-primary`}>HUNQZ</Text>
+        <View style={tw`flex-row items-center`}>
+          <Text style={tw`text-outline text-xl mr-4`}>🔍</Text>
+          <Text style={tw`text-outline text-xl`}>⚙️</Text>
+        </View>
+      </View>
+
+      <ScrollView 
+        style={tw`flex-1`} 
+        contentContainerStyle={tw`pb-60`}
+        showsVerticalScrollIndicator={false}
+      >
         {loading ? (
-          <View style={tw`items-center py-10`}>
-            <ActivityIndicator color={tw.color('primary')} />
-            <Text style={tw`mt-3 text-on-surface-variant font-body`}>Loading data...</Text>
+          <View style={tw`flex-1 items-center justify-center py-20`}>
+            <ActivityIndicator color={tw.color('primary')} size="large" />
+            <Text style={tw`mt-4 text-on-surface-variant font-body`}>Loading Profile...</Text>
           </View>
         ) : error ? (
-          <Text style={tw`rounded-xl bg-error/10 p-4 text-error font-body`}>{error}</Text>
+          <View style={tw`mx-6 mt-10 rounded-2xl bg-error/10 p-6 ring-1 ring-error/20`}>
+            <Text style={tw`text-center text-error font-body font-bold`}>{error}</Text>
+          </View>
         ) : !profile ? (
-          <Text style={tw`text-on-surface-variant font-body`}>Profile is empty.</Text>
+          <View style={tw`items-center py-20`}>
+            <Text style={tw`text-on-surface-variant font-body`}>Profile not found.</Text>
+          </View>
         ) : (
-          <View style={tw`rounded-xl bg-surface p-5 shadow ring-1 ring-outline/20`}>
-            <Text style={tw`text-2xl font-bold text-on-surface font-headline`}>{profile.name}</Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>
-              {profile.type} • {profile.onlineStatus}
-            </Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>Location: {profile.location}</Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>Age: {profile.age ?? "Unknown"}</Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>
-              Rate: {profile.rateHour ?? 0} {profile.currency}
-            </Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>Pictures: {profile.pictureCount}</Text>
-            <Text style={tw`mt-2 text-on-surface-variant font-body`}>Reviews: {profile.reviewCount}</Text>
-            {profile.headline ? <Text style={tw`mt-4 text-on-surface-variant font-body italic`}>"{profile.headline}"</Text> : null}
+          <View style={tw`flex-col gap-4`}>
+            <ProfileHeader profile={profile} />
+            
+            <PhotoGallery pictures={profile.pictures} />
+
+            <PersonalInfo personal={profile.personal} />
+            
+            <PreferencesAndServices sexual={profile.sexual} service={profile.service} />
+            
+            <Reviews reviews={profile.reviews} />
+
+            {/* Footer */}
+            <View style={tw`mt-12 items-center py-12 border-t border-outline/10`}>
+              <Text style={tw`text-2xl font-headline font-black tracking-tighter text-primary`}>HUNQZ</Text>
+              <Text style={tw`mt-4 text-sm text-on-surface-variant font-body`}>© 2026 Hunqz - Forged in Berlin.</Text>
+              <View style={tw`mt-6 flex-row gap-6`}>
+                <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Terms</Text>
+                <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Privacy</Text>
+                <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Safety</Text>
+              </View>
+            </View>
           </View>
         )}
       </ScrollView>
+
+      {/* Overlays */}
+      {!loading && profile && (
+        <>
+          <MobileActions />
+          <BottomNav />
+        </>
+      )}
     </View>
   );
 }

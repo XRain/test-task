@@ -12,6 +12,9 @@ const config = {
       path.resolve(projectRoot, "node_modules"),
       path.resolve(workspaceRoot, "node_modules")
     ],
+    extraNodeModules: {
+      react: path.resolve(projectRoot, "node_modules/react")
+    },
     unstable_enableSymlinks: true
   }
 };
