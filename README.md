@@ -10,11 +10,24 @@ Why pnpm? I worked with specialized monorepo tools (nx, lerna) and found them to
 ## Start demo project:
  You should have React Native runtime set up (I'm sure you have it already, or run ```npx react-native doctor``` to check what's missing)
 
+
 ```bash
 pnpm install
 pnpm dev:web
 pnpm dev:mobile
 ```
+
+please run ```cd ./ios && pod install``` if you want to run IOS app
+
+to run the RN app on your device or emulator:
+```bash
+pnpm --filter @repo/mobile ios
+```
+or
+```bash
+pnpm --filter @repo/mobile android
+```
+
 
 ## Validation
 
