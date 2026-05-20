@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import tw from '../lib/tw';
 
 interface CollapsibleSectionProps {
@@ -21,9 +22,11 @@ export function CollapsibleSection({ title, children, defaultOpen = false }: Col
         <Text style={tw`font-headline text-lg font-bold text-on-surface`}>
           {title}
         </Text>
-        <Text style={tw`text-outline ${isOpen ? 'rotate-180' : ''}`}>
-          {isOpen ? '▲' : '▼'}
-        </Text>
+        <Icon 
+          name={isOpen ? 'expand-less' : 'expand-more'} 
+          size={24} 
+          color={tw.color('outline')} 
+        />
       </TouchableOpacity>
       
       {isOpen && (

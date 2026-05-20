@@ -1,12 +1,12 @@
 import type { HunqzProfile } from "./types";
 
+/*
+* These options should usually be set in environment (env vars or CI/CD env),
+*  we'll keep it here for simplicity
+*  */
+const API_BASE_URL = "https://www.hunqz.com/api/opengrid/profiles/msescortplus";
 const PROFILE_IMAGE_BASE_URL = "https://www.hunqz.com/img/usr/original/0x0";
-
-interface ApiClientOptions {
-  baseUrl: string;
-  headers?: Record<string, string>;
-  timeoutMs?: number;
-}
+const API_TIMEOUT = 15000;
 
 export interface ApiClient {
   fetchProfile(): Promise<HunqzProfile>;
@@ -35,19 +35,18 @@ function withProfileImage(profile: HunqzProfile): HunqzProfile {
   };
 }
 
-export function createApiClient(options: ApiClientOptions): ApiClient {
+export function createApiClient(): ApiClient {
   async function fetchProfile(): Promise<HunqzProfile> {
     const controller = new AbortController();
-    const timeoutMs = options.timeoutMs ?? 15000;
+    const timeoutMs = API_TIMEOUT;
     const timeoutId = setTimeout(() => {
       controller.abort();
     }, timeoutMs);
 
     try {
-      const response = await fetch(options.baseUrl, {
+      const response = await fetch(API_BASE_URL, {
         headers: {
           Accept: "application/json",
-          ...options.headers
         },
         signal: controller.signal
       });

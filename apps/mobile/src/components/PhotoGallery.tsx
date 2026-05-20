@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type HunqzImage } from '@repo/shared';
 import tw from '../lib/tw';
 
@@ -16,7 +17,8 @@ export function PhotoGallery({ pictures }: PhotoGalleryProps) {
       
       <View style={tw`flex-row flex-wrap`}>
         {pictures.map((pic) => (
-          <View key={pic.id} style={tw`w-1/3 p-1`}>
+          <View key={pic.id} style={tw`w-1/2 p-1`}>
+            {/* Here we usually will implement fullscreen carousel, keep it simple for demo */}
             <TouchableOpacity activeOpacity={0.8} style={tw`aspect-square overflow-hidden rounded-xl bg-surface-variant`}>
               {pic.image_url ? (
                 <Image
@@ -27,7 +29,7 @@ export function PhotoGallery({ pictures }: PhotoGalleryProps) {
               ) : null}
               {!pic.is_public && (
                 <View style={tw`absolute inset-0 items-center justify-center bg-background/40`}>
-                  <Text style={tw`text-on-background`}>🔒</Text>
+                  <Icon name="lock" size={20} color={tw.color('on-background')} />
                 </View>
               )}
             </TouchableOpacity>

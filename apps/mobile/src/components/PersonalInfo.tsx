@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type HunqzPersonal } from '@repo/shared';
 import { CollapsibleSection } from './CollapsibleSection';
 import tw from '../lib/tw';
@@ -12,14 +13,14 @@ export function PersonalInfo({ personal }: PersonalInfoProps) {
   if (!personal) return null;
 
   const infoItems = [
-    { label: "Height", value: personal.height ? `${personal.height} cm` : null, icon: "📏" },
-    { label: "Weight", value: personal.weight ? `${personal.weight} kg` : null, icon: "⚖️" },
-    { label: "Build", value: personal.body_type, icon: "💪" },
-    { label: "Eyes", value: personal.eye_color, icon: "👁️" },
-    { label: "Facial Hair", value: personal.beard, icon: "🧔" },
-    { label: "Body Hair", value: personal.body_hair, icon: "✂️" },
-    { label: "Orientation", value: personal.orientation, icon: "🌈" },
-    { label: "Smoker", value: personal.smoker, icon: "🚭" },
+    { label: "Height", value: personal.height ? `${personal.height} cm` : null, icon: "straighten" },
+    { label: "Weight", value: personal.weight ? `${personal.weight} kg` : null, icon: "monitor-weight" },
+    { label: "Build", value: personal.body_type, icon: "fitness-center" },
+    { label: "Eyes", value: personal.eye_color, icon: "visibility" },
+    { label: "Facial Hair", value: personal.beard, icon: "face" },
+    { label: "Body Hair", value: personal.body_hair, icon: "content-cut" },
+    { label: "Orientation", value: personal.orientation, icon: "diversity-3" },
+    { label: "Smoker", value: personal.smoker, icon: "smoke-free" },
   ].filter(item => item.value);
 
   return (
@@ -37,7 +38,7 @@ export function PersonalInfo({ personal }: PersonalInfoProps) {
           {infoItems.map((item, idx) => (
             <View key={idx} style={tw`w-1/2 mb-6 flex-row items-start`}>
               <View style={tw`h-10 w-10 items-center justify-center rounded-xl bg-surface-variant/50`}>
-                <Text style={tw`text-lg`}>{item.icon}</Text>
+                <Icon name={item.icon} size={20} color={tw.color('primary')} />
               </View>
               <View style={tw`ml-3 flex-1`}>
                 <Text style={tw`text-xs font-medium text-outline`}>{item.label}</Text>

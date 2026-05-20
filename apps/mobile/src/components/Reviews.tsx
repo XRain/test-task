@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type HunqzReview } from '@repo/shared';
 import tw from '../lib/tw';
 
@@ -18,7 +19,7 @@ export function Reviews({ reviews }: ReviewsProps) {
         <View>
           <Text style={tw`font-headline text-xl font-bold text-on-surface`}>Reviews</Text>
           <View style={tw`mt-1 flex-row items-center`}>
-            <Text style={tw`text-primary mr-1 text-lg`}>⭐</Text>
+            <Icon name="star" size={20} color={tw.color('primary')} style={tw`mr-1`} />
             <Text style={tw`text-lg font-bold text-on-surface`}>{averageVote.toFixed(1)}</Text>
             <Text style={tw`text-outline ml-2`}>({reviews.length})</Text>
           </View>
@@ -47,12 +48,12 @@ export function Reviews({ reviews }: ReviewsProps) {
               </View>
               <View style={tw`flex-row`}>
                 {[...Array(5)].map((_, i) => (
-                  <Text 
+                  <Icon 
                     key={i} 
-                    style={tw`text-xs ${(review.vote || 0) > i ? 'text-primary' : 'text-outline/20'}`}
-                  >
-                    ⭐
-                  </Text>
+                    name="star"
+                    size={14}
+                    color={(review.vote || 0) > i ? tw.color('primary') : tw.color('outline/20')}
+                  />
                 ))}
               </View>
             </View>

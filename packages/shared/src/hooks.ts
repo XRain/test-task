@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { type ApiClient } from "./api";
 import { type HunqzProfile } from "./types";
 
+/*
+* Hook to work with API data, should have been shared between web and mobile apps,
+* but I desperately run of time and test API is off again, so I'll keep it for mobile only for now
+*  */
 export function useProfile(apiClient: ApiClient) {
   const [profile, setProfile] = useState<HunqzProfile | null>(null);
   const [loading, setLoading] = useState(true);

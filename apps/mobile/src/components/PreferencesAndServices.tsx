@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type HunqzSexual, type HunqzService } from '@repo/shared';
 import { CollapsibleSection } from './CollapsibleSection';
 import tw from '../lib/tw';
@@ -12,6 +13,10 @@ interface PreferencesAndServicesProps {
 export function PreferencesAndServices({ sexual, service }: PreferencesAndServicesProps) {
   if (!sexual && !service) return null;
 
+  {/*
+   * I planned to add the icons here as well, but test API is down again,
+   * don't want to waste your time, so leave it with plain text
+  */}
   const preferences = sexual?.enabled ? [
     { label: "Favored Position", value: sexual.favored_position },
     { label: "Anal Position", value: sexual.anal_position },
@@ -71,20 +76,6 @@ export function PreferencesAndServices({ sexual, service }: PreferencesAndServic
                       {service.rate_night} {service.currency}
                     </Text>
                   </View>
-                </View>
-              </View>
-              
-              <View>
-                <Text style={tw`mb-4 text-xs font-semibold uppercase tracking-wider text-outline`}>
-                  Offerings
-                </Text>
-                <View style={tw`flex-row flex-wrap`}>
-                  {service.service_offerings.map((offering, idx) => (
-                    <View key={idx} style={tw`w-full flex-row items-center mb-2`}>
-                      <Text style={tw`mr-2 text-primary`}>✓</Text>
-                      <Text style={tw`text-sm text-on-surface-variant`}>{offering}</Text>
-                    </View>
-                  ))}
                 </View>
               </View>
             </View>

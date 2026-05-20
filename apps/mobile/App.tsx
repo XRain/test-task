@@ -1,5 +1,6 @@
 import React from "react";
 import { ActivityIndicator, ScrollView, StatusBar, Text, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { createApiClient, useProfile } from "@repo/shared";
 import { ProfileHeader } from "./src/components/ProfileHeader";
 import { PhotoGallery } from "./src/components/PhotoGallery";
@@ -10,10 +11,7 @@ import { MobileActions } from "./src/components/MobileActions";
 import { BottomNav } from "./src/components/BottomNav";
 import tw from "./src/lib/tw";
 
-const apiClient = createApiClient({
-  baseUrl: "https://www.hunqz.com/api/opengrid/profiles/msescortplus",
-  timeoutMs: 15000
-});
+const apiClient = createApiClient();
 
 export default function App() {
   const { profile, loading, error } = useProfile(apiClient);
@@ -26,11 +24,12 @@ export default function App() {
       <View style={tw`flex-row items-center justify-between px-6 pt-16 pb-4 bg-background z-50`}>
         <Text style={tw`text-2xl font-headline font-black tracking-tighter text-primary`}>HUNQZ</Text>
         <View style={tw`flex-row items-center`}>
-          <Text style={tw`text-outline text-xl mr-4`}>🔍</Text>
-          <Text style={tw`text-outline text-xl`}>⚙️</Text>
+          {/* Dummy icons to make UI look more fancy, do nothing */}
+          <Icon name="search" size={24} color={tw.color('outline')} style={tw`mr-4`} />
+          <Icon name="settings" size={24} color={tw.color('outline')} />
         </View>
       </View>
-
+      {/* App content */}
       <ScrollView 
         style={tw`flex-1`} 
         contentContainerStyle={tw`pb-60`}
@@ -47,6 +46,7 @@ export default function App() {
           </View>
         ) : !profile ? (
           <View style={tw`items-center py-20`}>
+            {/* We always have one in demo data, but I added it just in case */}
             <Text style={tw`text-on-surface-variant font-body`}>Profile not found.</Text>
           </View>
         ) : (
@@ -66,6 +66,7 @@ export default function App() {
               <Text style={tw`text-2xl font-headline font-black tracking-tighter text-primary`}>HUNQZ</Text>
               <Text style={tw`mt-4 text-sm text-on-surface-variant font-body`}>© 2026 Hunqz - Forged in Berlin.</Text>
               <View style={tw`mt-6 flex-row gap-6`}>
+                {/* Dummy URLs to make UI look more fancy, no real navigation occurs */}
                 <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Terms</Text>
                 <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Privacy</Text>
                 <Text style={tw`text-[10px] font-bold text-outline uppercase tracking-widest`}>Safety</Text>

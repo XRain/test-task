@@ -77,7 +77,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
             )}
           </div>
           
-          {/* Desktop Actions */}
+          {/* desktop actions, do nothing, just added them for better appearance */}
           <div className="hidden space-x-3 sm:flex">
             <button className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-on-primary shadow-sm hover:bg-primary-container focus:outline-none">
               <span className="material-symbols-outlined mr-2">chat_bubble</span>

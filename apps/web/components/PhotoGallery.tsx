@@ -14,6 +14,7 @@ export function PhotoGallery({ pictures }: PhotoGalleryProps) {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {pictures.map((pic) => (
           <div key={pic.id} className="group relative aspect-square overflow-hidden rounded-xl bg-surface-variant">
+            {/* We actually don't have placeholder image, but that should usually present in real code */}
             <img
               src={pic.image_url || "/placeholder-photo.png"}
               alt={pic.comment || "Profile photo"}

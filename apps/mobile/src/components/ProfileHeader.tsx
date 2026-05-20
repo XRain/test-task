@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type HunqzProfile } from '@repo/shared';
 import tw from '../lib/tw';
 
@@ -14,7 +15,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
 
   return (
     <View style={tw`overflow-hidden bg-surface`}>
-      {/* Banner Area */}
+      {/* Banner Area, uses main profile image */}
       <View style={tw`relative h-64 w-full bg-surface-variant`}>
         {imageUrl && (
           <Image
@@ -52,8 +53,9 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
           </View>
 
           <View style={tw`mt-4 flex-row items-center`}>
+            <Icon name="place" size={16} color={tw.color('outline')} style={tw`mr-1`} />
             <Text style={tw`text-sm font-medium text-outline`}>
-              📍 {location}
+              {location}
             </Text>
           </View>
         </View>

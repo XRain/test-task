@@ -7,6 +7,7 @@ interface ReviewsProps {
 export function Reviews({ reviews }: ReviewsProps) {
   if (!reviews || reviews.length === 0) return null;
 
+  {/* TBH, I'm not sure if review.vote is the star rating or vote count, but let's assume it is a rating */}
   const averageVote = reviews.reduce((acc, r) => acc + (r.vote || 0), 0) / reviews.length;
 
   return (

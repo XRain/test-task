@@ -9,9 +9,7 @@ import { MobileActions } from "../components/MobileActions";
 
 export const dynamic = "force-dynamic";
 
-const apiClient = createApiClient({
-  baseUrl: "https://www.hunqz.com/api/opengrid/profiles/msescortplus"
-});
+const apiClient = createApiClient();
 
 export default async function HomePage() {
   const profile = await apiClient.fetchProfile();
@@ -86,12 +84,13 @@ export default async function HomePage() {
       <MobileActions />
       <BottomNav />
 
-      {/* Footer (Hidden on mobile according to common patterns, or just keep it) */}
+      {/* Footer (Hidden on mobile) */}
       <footer className="mt-12 hidden border-t border-outline/20 bg-surface py-12 sm:block">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-2xl font-headline font-black tracking-tighter text-primary">HUNQZ</p>
           <p className="mt-4 text-sm text-on-surface-variant">© 2026 Hunqz - Forged in Berlin.</p>
           <div className="mt-6 flex justify-center space-x-6">
+            {/* Dummy links to make UI look better, do nothing */}
             <a href="#" className="text-xs font-semibold text-outline hover:text-on-surface uppercase tracking-widest">Terms</a>
             <a href="#" className="text-xs font-semibold text-outline hover:text-on-surface uppercase tracking-widest">Privacy</a>
             <a href="#" className="text-xs font-semibold text-outline hover:text-on-surface uppercase tracking-widest">Safety</a>
