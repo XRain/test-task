@@ -1,7 +1,8 @@
 import React from "react";
 import { ActivityIndicator, ScrollView, StatusBar, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { createApiClient, useProfile } from "@repo/shared";
+import { createApiClient } from "@repo/shared";
+import { useProfile } from "@repo/shared/client";
 import { ProfileHeader } from "./src/components/ProfileHeader";
 import { PhotoGallery } from "./src/components/PhotoGallery";
 import { PersonalInfo } from "./src/components/PersonalInfo";
